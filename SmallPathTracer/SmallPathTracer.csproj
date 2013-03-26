@@ -7,8 +7,8 @@
     <ProjectGuid>{22677B81-4874-4C3F-97B4-31D4F7F182F1}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>smallpt</RootNamespace>
-    <AssemblyName>smallpt</AssemblyName>
+    <RootNamespace>SmallPathTracer</RootNamespace>
+    <AssemblyName>SmallPathTracer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
