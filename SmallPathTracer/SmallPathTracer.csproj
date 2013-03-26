@@ -40,9 +40,9 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Ray.cs" />
-    <Compile Include="Refl_t.cs" />
+    <Compile Include="ReflectionType.cs" />
     <Compile Include="Sphere.cs" />
-    <Compile Include="Vec.cs" />
+    <Compile Include="Vector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
