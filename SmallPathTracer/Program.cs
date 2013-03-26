@@ -77,7 +77,10 @@ internal static class Program {
       radiance(reflRay,depth)*Re+radiance(new Ray(x,tdir),depth)*Tr);
   }
   private static void Main(string[] args) {
-    int w=1024, h=768, samps = args.Length==1 ? int.Parse(args[0])/4 : 1; // # samples
+      int w = int.Parse(args[0]); // width
+      int h = int.Parse(args[1]); // height
+      int samps = int.Parse(args[2]); // # samples
+      string outputFileName = args[3];
     Ray cam=new Ray(new Vec(50,52,295.6), new Vec(0,-0.042612,-1).norm()); // cam pos, dir
     Vec cx = new Vec(w * .5135 / h), cy = (cx % cam.d).norm() * .5135;var c=Enumerable.Repeat(new Vec(), w*h).ToArray();
     for(int y=0; y<h; y++){                     // Loop over image rows
@@ -103,6 +106,6 @@ internal static class Program {
     builder.AppendFormat("P3\r\n{0} {1}\r\n{2}\r\n", w, h, 255);
     for(int i=0; i<w*h; i++)
       builder.AppendFormat("{0} {1} {2} ", toInt(c[i].x), toInt(c[i].y), toInt(c[i].z));
-    File.WriteAllText("image.ppm", builder.ToString());// Write image to PPM file.
+    File.WriteAllText(outputFileName, builder.ToString());// Write image to PPM file.
   }
 }
