@@ -1,90 +1,9 @@
-﻿using System;      // smallpt, a Path Tracer by Kevin Beason, 2008
+﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;   // Usage: Measure-Command {.\smallpt 5000}
 using System.Linq;
-using System.Text;
 
 namespace SmallPathTracer {
-    public class Vec {
-        public double x, y, z; // position, also color (r,g,b)
-
-        public Vec(double x_ = 0, double y_ = 0, double z_ = 0) {
-            x = x_;
-            y = y_;
-            z = z_;
-        }
-
-        public static Vec operator +(Vec a, Vec b) {
-            return new Vec(a.x + b.x, a.y + b.y, a.z + b.z);
-        }
-
-        public static Vec operator -(Vec a, Vec b) {
-            return new Vec(a.x - b.x, a.y - b.y, a.z - b.z);
-        }
-
-        public static Vec operator *(Vec a, double b) {
-            return new Vec(a.x * b, a.y * b, a.z * b);
-        }
-
-        public Vec mult(Vec b) {
-            return new Vec(x * b.x, y * b.y, z * b.z);
-        }
-
-        public Vec norm() {
-            return this * (1 / Math.Sqrt(x * x + y * y + z * z));
-        }
-
-        public double dot(Vec b) {
-            return x * b.x + y * b.y + z * b.z;
-        }
-
-        // cross:
-        public static Vec operator %(Vec a, Vec b) {
-            return new Vec(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
-        }
-    }
-
-    public class Ray {
-        public Vec o, d;
-
-        public Ray(Vec o_, Vec d_) {
-            o = o_;
-            d = d_;
-        }
-    }
-
-    public enum Refl_t {
-        DIFF,
-        SPEC,
-        REFR
-    };
-
-    // material types, used in radiance()
-    public class Sphere {
-        public double rad; // radius
-        public Vec p, e, c; // position, emission, color
-        public Refl_t refl; // reflection type (DIFFuse, SPECular, REFRactive)
-
-        public Sphere(double rad_, Vec p_, Vec e_, Vec c_, Refl_t refl_) {
-            rad = rad_;
-            p = p_;
-            e = e_;
-            c = c_;
-            refl = refl_;
-        }
-
-        public double intersect(Ray r) { // returns distance, 0 if nohit
-            Vec op = p - r.o; // Solve t^2*d.d + 2*t*(o-p).d + (o-p).(o-p)-R^2 = 0
-            double t, eps = 1e-4, b = op.dot(r.d), det = b * b - op.dot(op) + rad * rad;
-            if(det < 0)
-                return 0;
-            else
-                det = Math.Sqrt(det);
-            return (t = b - det) > eps ? t : ((t = b + det) > eps ? t : 0);
-        }
-    }
-
     public static class Program {
         private static Random random;
         private static Sphere[] spheres = new[] { //Scene: radius, position, emission, color, material 
