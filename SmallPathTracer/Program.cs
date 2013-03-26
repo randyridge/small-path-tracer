@@ -29,7 +29,7 @@ public class Sphere {
   }
 }
 internal static class Program {
-  static Random random = new Random();
+  static Random random = new Random(42);
   static Sphere[] spheres = new[] { //Scene: radius, position, emission, color, material 
     new Sphere(1e5, new Vec( 1e5+1,40.8,81.6), new Vec(),new Vec(.75,.25,.25),Refl_t.DIFF),//Left
     new Sphere(1e5, new Vec(-1e5+99,40.8,81.6),new Vec(),new Vec(.25,.25,.75),Refl_t.DIFF),//Rght
