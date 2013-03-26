@@ -4,7 +4,7 @@ small-path-tracer
 smallpt: Global Illumination in C#
 (http://www.kevinbeason.com/smallpt/)
 
-This is a refactoring of Kevin Beason's smallpt to C#. Please visit Kevin's site for more information.
+This is a refactoring of Kevin Beason's smallpt in C#. Please visit Kevin's site for more information.
 
 My purpose is to refactor smallpt for my own amusement and education...  This is similar to what Ronald Chen did in Java (http://pyrolistical.github.com/smallpt/).
 
