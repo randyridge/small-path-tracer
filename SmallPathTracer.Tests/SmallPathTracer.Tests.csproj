@@ -7,7 +7,7 @@
     <ProjectGuid>{41BEA1B4-47D6-485B-87A7-F59EECFCED22}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SmallPathTracer.Tests</RootNamespace>
+    <RootNamespace>SmallPathTracer</RootNamespace>
     <AssemblyName>SmallPathTracer.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

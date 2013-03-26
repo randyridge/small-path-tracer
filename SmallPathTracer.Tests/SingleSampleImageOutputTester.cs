@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using System.Drawing;
-using SmallPathTracer.Tests.Properties;
+using SmallPathTracer.Properties;
 using NUnit.Framework;
 
-namespace SmallPathTracer.Tests {
+namespace SmallPathTracer {
     public sealed class SingleSampleImageOutputTester {
         // --- Private Constant Fields ---
         private const string OutputFileName = "SingleSampleImageOutput.png";
