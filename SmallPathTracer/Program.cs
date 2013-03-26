@@ -29,7 +29,7 @@ public class Sphere {
   }
 }
 internal static class Program {
-  static Random random = new Random(42);
+  static Random random;
   static Sphere[] spheres = new[] { //Scene: radius, position, emission, color, material 
     new Sphere(1e5, new Vec( 1e5+1,40.8,81.6), new Vec(),new Vec(.75,.25,.25),Refl_t.DIFF),//Left
     new Sphere(1e5, new Vec(-1e5+99,40.8,81.6),new Vec(),new Vec(.25,.25,.75),Refl_t.DIFF),//Rght
@@ -81,6 +81,7 @@ internal static class Program {
       int h = int.Parse(args[1]); // height
       int samps = int.Parse(args[2]); // # samples
       string outputFileName = args[3];
+      random = new Random(int.Parse(args[4]));
     Ray cam=new Ray(new Vec(50,52,295.6), new Vec(0,-0.042612,-1).norm()); // cam pos, dir
     Vec cx = new Vec(w * .5135 / h), cy = (cx % cam.d).norm() * .5135;var c=Enumerable.Repeat(new Vec(), w*h).ToArray();
     for(int y=0; y<h; y++){                     // Loop over image rows
