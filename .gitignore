@@ -9,5 +9,6 @@ Dependencies
 thumbs.db
 
 # User-specific files
+*.ncrunch*
 *.suo
 *.user
