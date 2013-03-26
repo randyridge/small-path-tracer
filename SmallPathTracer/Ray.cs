@@ -1,10 +1,13 @@
 ﻿namespace SmallPathTracer {
-    public class Ray {
-        public Vec o, d;
+    public sealed class Ray {
+        // --- Public Readonly Fields ---
+        public readonly Vector Direction;
+        public readonly Vector Origin;
 
-        public Ray(Vec o_, Vec d_) {
-            o = o_;
-            d = d_;
+        // --- Public Constructors ---
+        public Ray(Vector origin, Vector direction) {
+            Origin = origin;
+            Direction = direction;
         }
     }
 }
