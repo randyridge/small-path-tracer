@@ -1,4 +1,6 @@
 ﻿using System;      // smallpt, a Path Tracer by Kevin Beason, 2008
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;   // Usage: Measure-Command {.\smallpt 5000}
 using System.Linq;
 using System.Text;
@@ -103,10 +105,13 @@ internal static class Program {
         }
       }
     }
-    StringBuilder builder = new StringBuilder();
-    builder.AppendFormat("P3\r\n{0} {1}\r\n{2}\r\n", w, h, 255);
-    for(int i=0; i<w*h; i++)
-      builder.AppendFormat("{0} {1} {2} ", toInt(c[i].x), toInt(c[i].y), toInt(c[i].z));
-    File.WriteAllText(outputFileName, builder.ToString());// Write image to PPM file.
+    var bitmap = new Bitmap(w, h, PixelFormat.Format24bppRgb);
+    for(var y = 0; y < h; y++) {
+        for(var x = 0; x < w; x++) {
+            var i = (1 + y - 1) * w + x;
+            bitmap.SetPixel(x, y, Color.FromArgb(toInt(c[i].x), toInt(c[i].y), toInt(c[i].z)));
+        }
+    }
+    bitmap.Save(outputFileName, ImageFormat.Png);
   }
 }
