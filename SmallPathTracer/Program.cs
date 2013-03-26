@@ -30,7 +30,7 @@ public class Sphere {
     return (t=b-det)>eps ? t : ((t=b+det)>eps ? t : 0);
   }
 }
-internal static class Program {
+public static class Program {
   static Random random;
   static Sphere[] spheres = new[] { //Scene: radius, position, emission, color, material 
     new Sphere(1e5, new Vec( 1e5+1,40.8,81.6), new Vec(),new Vec(.75,.25,.25),Refl_t.DIFF),//Left
@@ -78,7 +78,7 @@ internal static class Program {
       radiance(reflRay,depth)*RP:radiance(new Ray(x,tdir),depth)*TP) :
       radiance(reflRay,depth)*Re+radiance(new Ray(x,tdir),depth)*Tr);
   }
-  private static void Main(string[] args) {
+  public static void Main(string[] args) {
       int w = int.Parse(args[0]); // width
       int h = int.Parse(args[1]); // height
       int samps = int.Parse(args[2]); // # samples

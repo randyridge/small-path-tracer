@@ -5,6 +5,9 @@
 # NuGet Packages Directory
 Dependencies
 
+# Crap
+thumbs.db
+
 # User-specific files
 *.suo
 *.user
