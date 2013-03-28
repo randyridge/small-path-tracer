@@ -5,10 +5,13 @@
 # NuGet Packages Directory
 Dependencies
 
-# Crap
+# Windows Crap
 thumbs.db
 
-# User-specific files
+# NCrunch crap
+_NCrunch_*
 *.ncrunch*
+
+# User-specific files
 *.suo
 *.user
