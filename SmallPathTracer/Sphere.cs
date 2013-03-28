@@ -1,15 +1,10 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 
 namespace SmallPathTracer {
     public sealed class Sphere {
         // --- Private Readonly Fields ---
         private readonly double radius;
-
-        // --- Public Readonly Fields ---
-        public readonly Vector Color;
-        public readonly Vector Emission;
-        public readonly Vector Position;
-        public readonly ReflectionType ReflectionType;
 
         // --- Public Constructors ---
         public Sphere(double radius, Vector position, Vector emission, Vector color, ReflectionType reflectionType) {
@@ -20,13 +15,22 @@ namespace SmallPathTracer {
             ReflectionType = reflectionType;
         }
 
+        // --- Public Properties ---
+        public Vector Color { get; private set; }
+
+        public Vector Emission { get; private set; }
+
+        public Vector Position { get; private set; }
+
+        public ReflectionType ReflectionType { get; private set; }
+
         // --- Public Methods ---
         public double Intersect(Ray ray) { // returns distance, 0 if nohit
             var op = Position - ray.Origin; // Solve t^2*Direction.Direction + 2*t*(Origin-Position).Direction + (Origin-Position).(Origin-Position)-R^2 = 0
             double t;
             const double Epsilon = 1e-4;
-            var b = op.dot(ray.Direction);
-            var det = b * b - op.dot(op) + radius * radius;
+            var b = op.Dot(ray.Direction);
+            var det = b * b - op.Dot(op) + radius * radius;
             if(det < 0) {
                 return 0;
             }
