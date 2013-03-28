@@ -38,6 +38,7 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BitmapWriter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Ray.cs" />
     <Compile Include="ReflectionType.cs" />
