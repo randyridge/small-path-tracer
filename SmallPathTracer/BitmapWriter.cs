@@ -15,14 +15,15 @@ namespace SmallPathTracer {
 
         // --- Public Static Methods ---
         public static void Write(string fileName, int width, int height, Vector[] data) {
-            var bitmap = new Bitmap(width, height, PixelFormat.Format24bppRgb);
-            for(var y = 0; y < height; y++) {
-                for(var x = 0; x < width; x++) {
-                    var i = (1 + y - 1) * width + x;
-                    bitmap.SetPixel(x, y, Color.FromArgb(ToInt(data[i].X), ToInt(data[i].Y), ToInt(data[i].Z)));
+            using(var bitmap = new Bitmap(width, height, PixelFormat.Format24bppRgb)) {
+                for(var y = 0; y < height; y++) {
+                    for(var x = 0; x < width; x++) {
+                        var i = (1 + y - 1) * width + x;
+                        bitmap.SetPixel(x, y, Color.FromArgb(ToInt(data[i].X), ToInt(data[i].Y), ToInt(data[i].Z)));
+                    }
                 }
+                bitmap.Save(fileName, ImageFormat.Png);
             }
-            bitmap.Save(fileName, ImageFormat.Png);
         }
     }
 }
