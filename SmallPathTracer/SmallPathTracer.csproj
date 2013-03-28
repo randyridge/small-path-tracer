@@ -41,6 +41,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Ray.cs" />
     <Compile Include="ReflectionType.cs" />
+    <Compile Include="Renderer.cs" />
     <Compile Include="Sphere.cs" />
     <Compile Include="Vector.cs" />
   </ItemGroup>
