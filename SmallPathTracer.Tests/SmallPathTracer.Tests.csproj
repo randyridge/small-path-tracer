@@ -148,6 +148,12 @@
     <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>3</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Properties\SmallPathTracer.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework">
       <HintPath>..\Dependencies\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
@@ -165,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\ReferenceImages\MultiSampleReference.png" />
+    <None Include="Properties\SmallPathTracer.snk" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
