@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="Code Rules" Description="Code Rules" ToolsVersion="11.0">
+  <IncludeAll Action="Warning" />
+</RuleSet>
