@@ -63,35 +63,36 @@ namespace SmallPathTracer {
             if(intersection.IsMiss) {
                 return Vector.Zero; // if miss, return black
             }
-            var obj = intersection.Sphere; // the hit object
-            Point x = ray.Origin + ray.Direction * intersection.Distance;
-            Vector n = (x - obj.Position).Normalize();
-            Vector nl = n.Dot(ray.Direction) < 0 ? n : n * -1;
-            var f = obj.Color;
-            var p = f.Red > f.Green && f.Red > f.Blue ? f.Red : f.Green > f.Blue ? f.Green : f.Blue; // max ReflectionType
 
-            if(depth > 100) {
-                return obj.Emission; // *** Added to prevent stack overflow
+            var sphere = intersection.Sphere; // the hit object
+            if(depth > 100) { // *** Added to prevent stack overflow
+                return sphere.Emission;
             }
+
+            var x = ray.Origin + ray.Direction * intersection.Distance;
+            var n = (x - sphere.Position).Normalize();
+            var nl = n.Dot(ray.Direction) < 0 ? n : n * -1;
+            var color = sphere.Color;
+            var p = color.Red > color.Green && color.Red > color.Blue ? color.Red : color.Green > color.Blue ? color.Green : color.Blue; // max ReflectionType
 
             if(++depth > 5) {
                 if(random.NextDouble() < p) {
-                    f = f * (1 / p);
+                    color = color * (1 / p);
                 }
                 else {
-                    return obj.Emission; //R.R.
+                    return sphere.Emission; //R.R.
                 }
             }
 
-            if(obj.ReflectionType == ReflectionType.Diffuse) { // Ideal DIFFUSE reflection
-                return CalculateDiffuseRadiance(depth, nl, obj, f, x);
+            if(sphere.ReflectionType == ReflectionType.Diffuse) { // Ideal DIFFUSE reflection
+                return CalculateDiffuseRadiance(depth, nl, sphere, color, x);
             }
 
-            if(obj.ReflectionType == ReflectionType.Specular) { // Ideal SPECULAR reflection
-                return CalculateSpecularRadiance(ray, depth, obj, f, x, n);
+            if(sphere.ReflectionType == ReflectionType.Specular) { // Ideal SPECULAR reflection
+                return CalculateSpecularRadiance(ray, depth, sphere, color, x, n);
             }
 
-            return CalculateRefractionRadiance(ray, depth, x, n, nl, obj, f);
+            return CalculateRefractionRadiance(ray, depth, x, n, nl, sphere, color);
         }
 
         // --- Public Methods ---
