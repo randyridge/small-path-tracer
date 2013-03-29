@@ -17,16 +17,10 @@ namespace SmallPathTracer {
         };
 
         // --- Private Readonly Fields ---
-        private readonly int height;
         private readonly Random random;
-        private readonly int samples;
-        private readonly int width;
 
         // --- Public Constructors ---
-        public Renderer(int width, int height, int samples, int randomSeed) {
-            this.width = width;
-            this.height = height;
-            this.samples = samples;
+        public Renderer(int randomSeed) {
             random = new Random(randomSeed);
         }
 
@@ -118,7 +112,7 @@ namespace SmallPathTracer {
         }
 
         // --- Public Methods ---
-        public Color[] Render() {
+        public Color[] Render(int width, int height, int samples) {
             var cam = new Ray(new Point(50, 52, 295.6), new Vector(0, -0.042612, -1).Normalize()); // cam pos, dir
             var cx = new Vector(width * .5135 / height, 0, 0);
             var cy = (cx % cam.Direction).Normalize() * .5135;

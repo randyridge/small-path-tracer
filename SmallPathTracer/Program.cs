@@ -14,8 +14,8 @@ namespace SmallPathTracer {
             var height = int.Parse(args[1], NumberStyles.Integer, CultureInfo.InvariantCulture);
             var samples = int.Parse(args[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
             var outputFileName = args[3];
-            var renderer = new Renderer(width, height, samples, int.Parse(args[4], NumberStyles.Integer, CultureInfo.InvariantCulture));
-            var output = renderer.Render();
+            var renderer = new Renderer(int.Parse(args[4], NumberStyles.Integer, CultureInfo.InvariantCulture));
+            var output = renderer.Render(width, height, samples);
             BitmapWriter.Write(outputFileName, width, height, output);
         }
     }
