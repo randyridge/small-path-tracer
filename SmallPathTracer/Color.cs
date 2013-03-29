@@ -1,21 +1,33 @@
 ﻿namespace SmallPathTracer {
-    public sealed class Color {
+    public struct Color {
+        // --- Private Readonly Fields ---
+        private readonly double blue;
+        readonly private double green;
+        private readonly double red;
+
         // --- Public Static Readonly Fields ---
         public static readonly Color Black = new Color(0, 0, 0);
+        public static readonly Color White = new Color(1, 1, 1);
 
         // --- Public Constructors ---
         public Color(double red, double green, double blue) {
-            Red = red;
-            Green = green;
-            Blue = blue;
+            this.red = red;
+            this.green = green;
+            this.blue = blue;
         }
 
         // --- Public Properties ---
-        public double Blue { get; private set; }
+        public double Blue {
+            get { return blue; }
+        }
 
-        public double Green { get; private set; }
+        public double Green {
+            get { return green; }
+        }
 
-        public double Red { get; private set; }
+        public double Red {
+            get { return red; }
+        }
 
         // --- Public Static Operators ---
         public static Color operator *(Color color, double scalar) {

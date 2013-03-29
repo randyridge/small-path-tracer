@@ -1,18 +1,29 @@
 ﻿namespace SmallPathTracer {
-    public sealed class Point {
+    public struct Point {
+        // --- Private Readonly Fields ---
+        private readonly double x;
+        private readonly double y;
+        private readonly double z;
+
         // --- Public Constructors ---
         public Point(double x, double y, double z) {
-            X = x;
-            Y = y;
-            Z = z;
+            this.x = x;
+            this.y = y;
+            this.z = z;
         }
 
         // --- Public Properties ---
-        public double X { get; private set; }
+        public double X {
+            get { return x; }
+        }
 
-        public double Y { get; private set; }
+        public double Y {
+            get { return y; }
+        }
 
-        public double Z { get; private set; }
+        public double Z {
+            get { return z; }
+        }
 
         // --- Public Static Operators ---
         public static Vector operator -(Point finish, Point start) {

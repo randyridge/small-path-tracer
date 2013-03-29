@@ -1,23 +1,36 @@
 ﻿using System;
 
 namespace SmallPathTracer {
-    public sealed class Vector {
+    public struct Vector {
+        // --- Private Readonly Fields ---
+        private readonly double x;
+        private readonly double y;
+        private readonly double z;
+
         // --- Public Static Readonly Fields ---
+        public static readonly Vector UnitX = new Vector(1, 0, 0);
+        public static readonly Vector UnitY = new Vector(0, 1, 0);
         public static readonly Vector Zero = new Vector(0, 0, 0);
 
         // --- Public Constructors ---
         public Vector(double x, double y, double z) {
-            X = x;
-            Y = y;
-            Z = z;
+            this.x = x;
+            this.y = y;
+            this.z = z;
         }
 
         // --- Public Properties ---
-        public double X { get; private set; }
+        public double X {
+            get { return x; }
+        }
 
-        public double Y { get; private set; }
+        public double Y {
+            get { return y; }
+        }
 
-        public double Z { get; private set; }
+        public double Z {
+            get { return z; }
+        }
 
         // --- Public Static Operators ---
         public static Vector operator %(Vector left, Vector right) {

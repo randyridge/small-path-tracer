@@ -11,8 +11,8 @@ namespace SmallPathTracer {
             new Sphere(1e5, new Point(50, 40.8, -1e5 + 170), Vector.Zero, Color.Black, ReflectionType.Diffuse), //Frnt
             new Sphere(1e5, new Point(50, 1e5, 81.6), Vector.Zero, new Color(.75, .75, .75), ReflectionType.Diffuse), //Botm
             new Sphere(1e5, new Point(50, -1e5 + 81.6, 81.6), Vector.Zero, new Color(.75, .75, .75), ReflectionType.Diffuse), //Top
-            new Sphere(16.5, new Point(27, 16.5, 47), Vector.Zero, new Color(1, 1, 1) * .999, ReflectionType.Specular), //Mirr
-            new Sphere(16.5, new Point(73, 16.5, 78), Vector.Zero, new Color(1, 1, 1) * .999, ReflectionType.Refractive), //Glas
+            new Sphere(16.5, new Point(27, 16.5, 47), Vector.Zero, Color.White * .999, ReflectionType.Specular), //Mirr
+            new Sphere(16.5, new Point(73, 16.5, 78), Vector.Zero, Color.White * .999, ReflectionType.Refractive), //Glas
             new Sphere(600, new Point(50, 681.6 - .27, 81.6), new Vector(12, 12, 12), Color.Black, ReflectionType.Diffuse) //Lite
         };
 
@@ -73,7 +73,7 @@ namespace SmallPathTracer {
                 var r2 = random.NextDouble();
                 var r2SquareRoot = Math.Sqrt(r2);
                 var w = nl;
-                var u = ((Math.Abs(w.X) > .1 ? new Vector(0, 1, 0) : new Vector(1, 0, 0)) % w).Normalize();
+                var u = ((Math.Abs(w.X) > .1 ? Vector.UnitY : Vector.UnitX) % w).Normalize();
                 var v = w % u;
                 var d = (u * Math.Cos(r1) * r2SquareRoot + v * Math.Sin(r1) * r2SquareRoot + w * Math.Sqrt(1 - r2)).Normalize();
                 return obj.Emission + f.Multiply(Radiance(new Ray(x, d), depth));

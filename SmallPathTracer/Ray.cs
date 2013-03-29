@@ -1,14 +1,22 @@
 ﻿namespace SmallPathTracer {
-    public sealed class Ray {
+    public struct Ray {
+        // --- Private Readonly Fields ---
+        private readonly Vector direction;
+        private readonly Point origin;
+
         // --- Public Constructors ---
         public Ray(Point origin, Vector direction) {
-            Origin = origin;
-            Direction = direction;
+            this.origin = origin;
+            this.direction = direction;
         }
 
         // --- Public Properties ---
-        public Vector Direction { get; private set; }
+        public Vector Direction {
+            get { return direction; }
+        }
 
-        public Point Origin { get; private set; }
+        public Point Origin {
+            get { return origin; }
+        }
     }
 }
