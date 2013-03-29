@@ -107,9 +107,9 @@ namespace SmallPathTracer {
 
         // --- Public Methods ---
         public Color[] Render(int width, int height, int samples) {
-            var cam = new Ray(new Point(50, 52, 295.6), new Vector(0, -0.042612, -1).Normalize()); // cam pos, dir
+            var camera = new Camera(new Point(50, 52, 295.6), new Vector(0, -0.042612, -1).Normalize());
             var cx = new Vector(width * .5135 / height, 0, 0);
-            var cy = (cx % cam.Direction).Normalize() * .5135;
+            var cy = (cx % camera.Direction).Normalize() * .5135;
             var colors = Enumerable.Repeat(Color.Black, width * height).ToArray();
             for(var y = 0; y < height; y++) { // Loop over image rows
                 //Console.Write("\rRendering ({0} spp) {1:0.00}%",samps*4, 100.*Y/(h-1));
@@ -122,9 +122,9 @@ namespace SmallPathTracer {
                                 var dx = r1 < 1 ? Math.Sqrt(r1) - 1 : 1 - Math.Sqrt(2 - r1);
                                 var r2 = 2 * random.NextDouble();
                                 var dy = r2 < 1 ? Math.Sqrt(r2) - 1 : 1 - Math.Sqrt(2 - r2);
-                                var d = cx * (((sx + .5 + dx) / 2 + x) / width - .5) + cy * (((sy + .5 + dy) / 2 + y) / height - .5) + cam.Direction;
+                                var d = cx * (((sx + .5 + dx) / 2 + x) / width - .5) + cy * (((sy + .5 + dy) / 2 + y) / height - .5) + camera.Direction;
                                 d = d.Normalize();
-                                r = r + Radiance(new Ray(cam.Origin + d * 140, d), 0) * (1.0 / samples);
+                                r = r + Radiance(new Ray(camera.Position + d * 140, d), 0) * (1.0 / samples);
                             } // Camera rays are pushed ^^^^^ forward to start in interior
                             colors[i] = colors[i] + new Color(r.X.ToClosedUnitInterval(), r.Y.ToClosedUnitInterval(), r.Z.ToClosedUnitInterval()) * .25;
                         }
