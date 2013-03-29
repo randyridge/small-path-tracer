@@ -7,7 +7,7 @@ namespace SmallPathTracer {
         private readonly double radius;
 
         // --- Public Constructors ---
-        public Sphere(double radius, Vector position, Vector emission, Vector color, ReflectionType reflectionType) {
+        public Sphere(double radius, Point position, Vector emission, Color color, ReflectionType reflectionType) {
             this.radius = radius;
             Position = position;
             Emission = emission;
@@ -16,11 +16,11 @@ namespace SmallPathTracer {
         }
 
         // --- Public Properties ---
-        public Vector Color { get; private set; }
+        public Color Color { get; private set; }
 
         public Vector Emission { get; private set; }
 
-        public Vector Position { get; private set; }
+        public Point Position { get; private set; }
 
         public ReflectionType ReflectionType { get; private set; }
 

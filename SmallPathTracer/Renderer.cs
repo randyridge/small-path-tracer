@@ -5,15 +5,15 @@ namespace SmallPathTracer {
     public sealed class Renderer {
         // --- Private Static Readonly Fields ---
         private static readonly Sphere[] spheres = new[] { //Scene: radius, position, emission, color, material 
-            new Sphere(1e5, new Vector(1e5 + 1, 40.8, 81.6), new Vector(), new Vector(.75, .25, .25), ReflectionType.Diffuse), //Left
-            new Sphere(1e5, new Vector(-1e5 + 99, 40.8, 81.6), new Vector(), new Vector(.25, .25, .75), ReflectionType.Diffuse), //Rght
-            new Sphere(1e5, new Vector(50, 40.8, 1e5), new Vector(), new Vector(.75, .75, .75), ReflectionType.Diffuse), //Back
-            new Sphere(1e5, new Vector(50, 40.8, -1e5 + 170), new Vector(), new Vector(), ReflectionType.Diffuse), //Frnt
-            new Sphere(1e5, new Vector(50, 1e5, 81.6), new Vector(), new Vector(.75, .75, .75), ReflectionType.Diffuse), //Botm
-            new Sphere(1e5, new Vector(50, -1e5 + 81.6, 81.6), new Vector(), new Vector(.75, .75, .75), ReflectionType.Diffuse), //Top
-            new Sphere(16.5, new Vector(27, 16.5, 47), new Vector(), new Vector(1, 1, 1) * .999, ReflectionType.Specular), //Mirr
-            new Sphere(16.5, new Vector(73, 16.5, 78), new Vector(), new Vector(1, 1, 1) * .999, ReflectionType.Refractive), //Glas
-            new Sphere(600, new Vector(50, 681.6 - .27, 81.6), new Vector(12, 12, 12), new Vector(), ReflectionType.Diffuse) //Lite
+            new Sphere(1e5, new Point(1e5 + 1, 40.8, 81.6), new Vector(), new Color(.75, .25, .25), ReflectionType.Diffuse), //Left
+            new Sphere(1e5, new Point(-1e5 + 99, 40.8, 81.6), new Vector(), new Color(.25, .25, .75), ReflectionType.Diffuse), //Rght
+            new Sphere(1e5, new Point(50, 40.8, 1e5), new Vector(), new Color(.75, .75, .75), ReflectionType.Diffuse), //Back
+            new Sphere(1e5, new Point(50, 40.8, -1e5 + 170), new Vector(), Color.Black, ReflectionType.Diffuse), //Frnt
+            new Sphere(1e5, new Point(50, 1e5, 81.6), new Vector(), new Color(.75, .75, .75), ReflectionType.Diffuse), //Botm
+            new Sphere(1e5, new Point(50, -1e5 + 81.6, 81.6), new Vector(), new Color(.75, .75, .75), ReflectionType.Diffuse), //Top
+            new Sphere(16.5, new Point(27, 16.5, 47), new Vector(), new Color(1, 1, 1) * .999, ReflectionType.Specular), //Mirr
+            new Sphere(16.5, new Point(73, 16.5, 78), new Vector(), new Color(1, 1, 1) * .999, ReflectionType.Refractive), //Glas
+            new Sphere(600, new Point(50, 681.6 - .27, 81.6), new Vector(12, 12, 12), Color.Black, ReflectionType.Diffuse) //Lite
         };
 
         // --- Private Readonly Fields ---
@@ -55,8 +55,11 @@ namespace SmallPathTracer {
                 return new Vector(); // if miss, return black
             }
             var obj = spheres[id]; // the hit object
-            Vector x = r.Origin + r.Direction * t, n = (x - obj.Position).Normalize(), nl = n.Dot(r.Direction) < 0 ? n : n * -1, f = obj.Color;
-            var p = f.X > f.Y && f.X > f.Z ? f.X : f.Y > f.Z ? f.Y : f.Z; // max ReflectionType
+            Point x = r.Origin + r.Direction * t;
+            Vector n = (x - obj.Position).Normalize();
+            Vector nl = n.Dot(r.Direction) < 0 ? n : n * -1;
+            var f = obj.Color;
+            var p = f.Red > f.Green && f.Red > f.Blue ? f.Red : f.Green > f.Blue ? f.Green : f.Blue; // max ReflectionType
 
             if(depth > 100) {
                 return obj.Emission; // *** Added to prevent stack overflow
@@ -116,7 +119,7 @@ namespace SmallPathTracer {
 
         // --- Public Methods ---
         public Color[] Render() {
-            var cam = new Ray(new Vector(50, 52, 295.6), new Vector(0, -0.042612, -1).Normalize()); // cam pos, dir
+            var cam = new Ray(new Point(50, 52, 295.6), new Vector(0, -0.042612, -1).Normalize()); // cam pos, dir
             var cx = new Vector(width * .5135 / height);
             var cy = (cx % cam.Direction).Normalize() * .5135;
             var colors = Enumerable.Repeat(new Color(0, 0, 0), width * height).ToArray();
