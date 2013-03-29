@@ -1,28 +1,39 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 
 namespace SmallPathTracer {
-    public sealed class Sphere {
+    public struct Sphere {
         // --- Private Readonly Fields ---
+        private readonly Color color;
+        private readonly Vector emission;
+        private readonly Point position;
         private readonly double radius;
+        private readonly ReflectionType reflectionType;
 
         // --- Public Constructors ---
         public Sphere(double radius, Point position, Vector emission, Color color, ReflectionType reflectionType) {
             this.radius = radius;
-            Position = position;
-            Emission = emission;
-            Color = color;
-            ReflectionType = reflectionType;
+            this.position = position;
+            this.emission = emission;
+            this.color = color;
+            this.reflectionType = reflectionType;
         }
 
         // --- Public Properties ---
-        public Color Color { get; private set; }
+        public Color Color {
+            get { return color; }
+        }
 
-        public Vector Emission { get; private set; }
+        public Vector Emission {
+            get { return emission; }
+        }
 
-        public Point Position { get; private set; }
+        public Point Position {
+            get { return position; }
+        }
 
-        public ReflectionType ReflectionType { get; private set; }
+        public ReflectionType ReflectionType {
+            get { return reflectionType; }
+        }
 
         // --- Public Methods ---
         public double Intersect(Ray ray) { // returns distance, 0 if nohit
