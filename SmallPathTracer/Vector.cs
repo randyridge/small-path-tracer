@@ -33,6 +33,10 @@ namespace SmallPathTracer {
         }
 
         // --- Public Static Operators ---
+        public static bool operator !=(Vector left, Vector right) {
+            return !(left == right);
+        }
+
         public static Vector operator %(Vector left, Vector right) {
             return new Vector(left.Y * right.Z - left.Z * right.Y, left.Z * right.X - left.X * right.Z, left.X * right.Y - left.Y * right.X);
         }
@@ -47,6 +51,10 @@ namespace SmallPathTracer {
 
         public static Vector operator +(Vector left, Vector right) {
             return new Vector(left.X + right.X, left.Y + right.Y, left.Z + right.Z);
+        }
+
+        public static bool operator ==(Vector left, Vector right) {
+            return left.x == right.x && left.y == right.y && left.z == right.z;
         }
 
         // --- Public Methods ---

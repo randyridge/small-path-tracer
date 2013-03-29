@@ -2,7 +2,7 @@
     public struct Color {
         // --- Private Readonly Fields ---
         private readonly double blue;
-        readonly private double green;
+        private readonly double green;
         private readonly double red;
 
         // --- Public Static Readonly Fields ---
@@ -30,12 +30,20 @@
         }
 
         // --- Public Static Operators ---
+        public static bool operator !=(Color left, Color right) {
+            return !(left == right);
+        }
+
         public static Color operator *(Color color, double scalar) {
             return new Color(color.Red * scalar, color.Green * scalar, color.Blue * scalar);
         }
 
         public static Color operator +(Color left, Color right) {
             return new Color(left.Red + right.Red, left.Green + right.Green, left.Blue + right.Blue);
+        }
+
+        public static bool operator ==(Color left, Color right) {
+            return left.blue == right.blue && left.green == right.green && left.red == right.red;
         }
 
         // --- Public Methods ---

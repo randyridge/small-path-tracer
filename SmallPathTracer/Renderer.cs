@@ -29,27 +29,25 @@ namespace SmallPathTracer {
             return x < 0 ? 0 : x > 1 ? 1 : x;
         }
 
-        private static bool Intersect(Ray r, out double t, ref int id) {
-            var inf = t = 1e20;
-            for(var i = spheres.Length - 1; i >= 0; i--) {
-                var d = spheres[i].Intersect(r);
-                if(d > 0 && d < t) {
-                    t = d;
-                    id = i;
+        private static Intersection Intersect(Ray ray) {
+            var intersection = Intersection.Miss;
+            foreach(var sphere in spheres) {
+                var sphereIntersection = sphere.Intersect(ray);
+                if(sphereIntersection.IsHit && sphereIntersection.IsCloserThan(intersection)) {
+                    intersection = sphereIntersection;
                 }
             }
-            return t < inf;
+            return intersection;
         }
 
         // --- Private Methods ---
         private Vector Radiance(Ray r, int depth) {
-            double t; // distance to intersection
-            var id = 0; // id of intersected object
-            if(!Intersect(r, out t, ref id)) {
+            var intersection = Intersect(r);
+            if(intersection.IsMiss) {
                 return Vector.Zero; // if miss, return black
             }
-            var obj = spheres[id]; // the hit object
-            Point x = r.Origin + r.Direction * t;
+            var obj = intersection.Sphere; // the hit object
+            Point x = r.Origin + r.Direction * intersection.Distance;
             Vector n = (x - obj.Position).Normalize();
             Vector nl = n.Dot(r.Direction) < 0 ? n : n * -1;
             var f = obj.Color;
