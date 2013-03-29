@@ -116,7 +116,7 @@ namespace SmallPathTracer {
             var cam = new Ray(new Point(50, 52, 295.6), new Vector(0, -0.042612, -1).Normalize()); // cam pos, dir
             var cx = new Vector(width * .5135 / height, 0, 0);
             var cy = (cx % cam.Direction).Normalize() * .5135;
-            var colors = Enumerable.Repeat(new Color(0, 0, 0), width * height).ToArray();
+            var colors = Enumerable.Repeat(Color.Black, width * height).ToArray();
             for(var y = 0; y < height; y++) { // Loop over image rows
                 //Console.Write("\rRendering ({0} spp) {1:0.00}%",samps*4, 100.*Y/(h-1));
                 for(var x = 0; x < width; x++) { // Loop cols
