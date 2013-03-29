@@ -2,8 +2,11 @@
 
 namespace SmallPathTracer {
     public sealed class Vector {
+        // --- Public Static Readonly Fields ---
+        public static readonly Vector Zero = new Vector(0, 0, 0);
+
         // --- Public Constructors ---
-        public Vector(double x = 0, double y = 0, double z = 0) {
+        public Vector(double x, double y, double z) {
             X = x;
             Y = y;
             Z = z;
@@ -36,10 +39,6 @@ namespace SmallPathTracer {
         // --- Public Methods ---
         public double Dot(Vector vector) {
             return X * vector.X + Y * vector.Y + Z * vector.Z;
-        }
-
-        public Vector Multiply(Vector vector) {
-            return new Vector(X * vector.X, Y * vector.Y, Z * vector.Z);
         }
 
         public Vector Normalize() {

@@ -5,14 +5,14 @@ namespace SmallPathTracer {
     public sealed class Renderer {
         // --- Private Static Readonly Fields ---
         private static readonly Sphere[] spheres = new[] { //Scene: radius, position, emission, color, material 
-            new Sphere(1e5, new Point(1e5 + 1, 40.8, 81.6), new Vector(), new Color(.75, .25, .25), ReflectionType.Diffuse), //Left
-            new Sphere(1e5, new Point(-1e5 + 99, 40.8, 81.6), new Vector(), new Color(.25, .25, .75), ReflectionType.Diffuse), //Rght
-            new Sphere(1e5, new Point(50, 40.8, 1e5), new Vector(), new Color(.75, .75, .75), ReflectionType.Diffuse), //Back
-            new Sphere(1e5, new Point(50, 40.8, -1e5 + 170), new Vector(), Color.Black, ReflectionType.Diffuse), //Frnt
-            new Sphere(1e5, new Point(50, 1e5, 81.6), new Vector(), new Color(.75, .75, .75), ReflectionType.Diffuse), //Botm
-            new Sphere(1e5, new Point(50, -1e5 + 81.6, 81.6), new Vector(), new Color(.75, .75, .75), ReflectionType.Diffuse), //Top
-            new Sphere(16.5, new Point(27, 16.5, 47), new Vector(), new Color(1, 1, 1) * .999, ReflectionType.Specular), //Mirr
-            new Sphere(16.5, new Point(73, 16.5, 78), new Vector(), new Color(1, 1, 1) * .999, ReflectionType.Refractive), //Glas
+            new Sphere(1e5, new Point(1e5 + 1, 40.8, 81.6), Vector.Zero, new Color(.75, .25, .25), ReflectionType.Diffuse), //Left
+            new Sphere(1e5, new Point(-1e5 + 99, 40.8, 81.6), Vector.Zero, new Color(.25, .25, .75), ReflectionType.Diffuse), //Rght
+            new Sphere(1e5, new Point(50, 40.8, 1e5), Vector.Zero, new Color(.75, .75, .75), ReflectionType.Diffuse), //Back
+            new Sphere(1e5, new Point(50, 40.8, -1e5 + 170), Vector.Zero, Color.Black, ReflectionType.Diffuse), //Frnt
+            new Sphere(1e5, new Point(50, 1e5, 81.6), Vector.Zero, new Color(.75, .75, .75), ReflectionType.Diffuse), //Botm
+            new Sphere(1e5, new Point(50, -1e5 + 81.6, 81.6), Vector.Zero, new Color(.75, .75, .75), ReflectionType.Diffuse), //Top
+            new Sphere(16.5, new Point(27, 16.5, 47), Vector.Zero, new Color(1, 1, 1) * .999, ReflectionType.Specular), //Mirr
+            new Sphere(16.5, new Point(73, 16.5, 78), Vector.Zero, new Color(1, 1, 1) * .999, ReflectionType.Refractive), //Glas
             new Sphere(600, new Point(50, 681.6 - .27, 81.6), new Vector(12, 12, 12), Color.Black, ReflectionType.Diffuse) //Lite
         };
 
@@ -52,7 +52,7 @@ namespace SmallPathTracer {
             double t; // distance to intersection
             var id = 0; // id of intersected object
             if(!Intersect(r, out t, ref id)) {
-                return new Vector(); // if miss, return black
+                return Vector.Zero; // if miss, return black
             }
             var obj = spheres[id]; // the hit object
             Point x = r.Origin + r.Direction * t;
@@ -79,7 +79,7 @@ namespace SmallPathTracer {
                 var r2 = random.NextDouble();
                 var r2SquareRoot = Math.Sqrt(r2);
                 var w = nl;
-                var u = ((Math.Abs(w.X) > .1 ? new Vector(0, 1) : new Vector(1)) % w).Normalize();
+                var u = ((Math.Abs(w.X) > .1 ? new Vector(0, 1, 0) : new Vector(1, 0, 0)) % w).Normalize();
                 var v = w % u;
                 var d = (u * Math.Cos(r1) * r2SquareRoot + v * Math.Sin(r1) * r2SquareRoot + w * Math.Sqrt(1 - r2)).Normalize();
                 return obj.Emission + f.Multiply(Radiance(new Ray(x, d), depth));
@@ -120,7 +120,7 @@ namespace SmallPathTracer {
         // --- Public Methods ---
         public Color[] Render() {
             var cam = new Ray(new Point(50, 52, 295.6), new Vector(0, -0.042612, -1).Normalize()); // cam pos, dir
-            var cx = new Vector(width * .5135 / height);
+            var cx = new Vector(width * .5135 / height, 0, 0);
             var cy = (cx % cam.Direction).Normalize() * .5135;
             var colors = Enumerable.Repeat(new Color(0, 0, 0), width * height).ToArray();
             for(var y = 0; y < height; y++) { // Loop over image rows
@@ -128,7 +128,7 @@ namespace SmallPathTracer {
                 for(var x = 0; x < width; x++) { // Loop cols
                     for(int sy = 0, i = (height - y - 1) * width + x; sy < 2; sy++) { // 2x2 subpixel rows
                         for(var sx = 0; sx < 2; sx++) { // 2x2 subpixel cols
-                            var r = new Vector();
+                            var r = Vector.Zero;
                             for(var s = 0; s < samples; s++) {
                                 var r1 = 2 * random.NextDouble();
                                 var dx = r1 < 1 ? Math.Sqrt(r1) - 1 : 1 - Math.Sqrt(2 - r1);
