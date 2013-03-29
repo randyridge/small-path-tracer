@@ -11,8 +11,8 @@ namespace SmallPathTracer {
             new Sphere(1e5, new Point(50, 40.8, -1e5 + 170), Vector.Zero, Color.Black, ReflectionType.Diffuse), //Frnt
             new Sphere(1e5, new Point(50, 1e5, 81.6), Vector.Zero, new Color(.75, .75, .75), ReflectionType.Diffuse), //Botm
             new Sphere(1e5, new Point(50, -1e5 + 81.6, 81.6), Vector.Zero, new Color(.75, .75, .75), ReflectionType.Diffuse), //Top
-            new Sphere(16.5, new Point(27, 16.5, 47), Vector.Zero, Color.White * .999, ReflectionType.Specular), //Mirr
-            new Sphere(16.5, new Point(73, 16.5, 78), Vector.Zero, Color.White * .999, ReflectionType.Refractive), //Glas
+            new Sphere(16.5, new Point(27, 16.5, 47), Vector.Zero, new Color(.999, .999, .999), ReflectionType.Specular), //Mirr
+            new Sphere(16.5, new Point(73, 16.5, 78), Vector.Zero, new Color(.999, .999, .999), ReflectionType.Refractive), //Glas
             new Sphere(600, new Point(50, 681.6 - .27, 81.6), new Vector(12, 12, 12), Color.Black, ReflectionType.Diffuse) //Lite
         };
 
@@ -25,10 +25,6 @@ namespace SmallPathTracer {
         }
 
         // --- Private Static Methods ---
-        private static double Clamp(double x) {
-            return x < 0 ? 0 : x > 1 ? 1 : x;
-        }
-
         private static Intersection Intersect(Ray ray) {
             var intersection = Intersection.Miss;
             foreach(var sphere in spheres) {
@@ -130,7 +126,7 @@ namespace SmallPathTracer {
                                 d = d.Normalize();
                                 r = r + Radiance(new Ray(cam.Origin + d * 140, d), 0) * (1.0 / samples);
                             } // Camera rays are pushed ^^^^^ forward to start in interior
-                            colors[i] = colors[i] + new Color(Clamp(r.X), Clamp(r.Y), Clamp(r.Z)) * .25;
+                            colors[i] = colors[i] + new Color(r.X.ToClosedUnitInterval(), r.Y.ToClosedUnitInterval(), r.Z.ToClosedUnitInterval()) * .25;
                         }
                     }
                 }

@@ -5,12 +5,8 @@ using System;
 namespace SmallPathTracer {
     public static class BitmapWriter {
         // --- Private Static Methods ---
-        private static double Clamp(double x) {
-            return x < 0 ? 0 : x > 1 ? 1 : x;
-        }
-
         private static int ToInt(double x) {
-            return (int) (Math.Pow(Clamp(x), 1 / 2.2) * 255 + .5);
+            return (int) (Math.Pow(x.ToClosedUnitInterval(), 1 / 2.2) * 255 + .5);
         }
 
         // --- Public Static Methods ---
