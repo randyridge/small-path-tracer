@@ -115,10 +115,11 @@ namespace SmallPathTracer {
         }
 
         // --- Public Methods ---
-        public Vector[] Render() {
+        public Color[] Render() {
             var cam = new Ray(new Vector(50, 52, 295.6), new Vector(0, -0.042612, -1).Normalize()); // cam pos, dir
-            Vector cx = new Vector(width * .5135 / height), cy = (cx % cam.Direction).Normalize() * .5135;
-            var c = Enumerable.Repeat(new Vector(), width * height).ToArray();
+            var cx = new Vector(width * .5135 / height);
+            var cy = (cx % cam.Direction).Normalize() * .5135;
+            var colors = Enumerable.Repeat(new Color(0, 0, 0), width * height).ToArray();
             for(var y = 0; y < height; y++) { // Loop over image rows
                 //Console.Write("\rRendering ({0} spp) {1:0.00}%",samps*4, 100.*Y/(h-1));
                 for(var x = 0; x < width; x++) { // Loop cols
@@ -130,17 +131,16 @@ namespace SmallPathTracer {
                                 var dx = r1 < 1 ? Math.Sqrt(r1) - 1 : 1 - Math.Sqrt(2 - r1);
                                 var r2 = 2 * random.NextDouble();
                                 var dy = r2 < 1 ? Math.Sqrt(r2) - 1 : 1 - Math.Sqrt(2 - r2);
-                                var d = cx * (((sx + .5 + dx) / 2 + x) / width - .5) +
-                                    cy * (((sy + .5 + dy) / 2 + y) / height - .5) + cam.Direction;
+                                var d = cx * (((sx + .5 + dx) / 2 + x) / width - .5) + cy * (((sy + .5 + dy) / 2 + y) / height - .5) + cam.Direction;
                                 d = d.Normalize();
                                 r = r + Radiance(new Ray(cam.Origin + d * 140, d), 0) * (1.0 / samples);
                             } // Camera rays are pushed ^^^^^ forward to start in interior
-                            c[i] = c[i] + new Vector(Clamp(r.X), Clamp(r.Y), Clamp(r.Z)) * .25;
+                            colors[i] = colors[i] + new Color(Clamp(r.X), Clamp(r.Y), Clamp(r.Z)) * .25;
                         }
                     }
                 }
             }
-            return c;
+            return colors;
         }
     }
 }
