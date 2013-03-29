@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 
 namespace SmallPathTracer {
@@ -15,7 +16,10 @@ namespace SmallPathTracer {
             var samples = int.Parse(args[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
             var outputFileName = args[3];
             var renderer = new Renderer(int.Parse(args[4], NumberStyles.Integer, CultureInfo.InvariantCulture));
+            var stopwatch = Stopwatch.StartNew();
             var output = renderer.Render(width, height, samples);
+            stopwatch.Stop();
+            Console.WriteLine("Rendered {0}x{1}x{2} in {3:#,#}ms.", width, height, samples, stopwatch.ElapsedMilliseconds);
             BitmapWriter.Write(outputFileName, width, height, output);
         }
     }
