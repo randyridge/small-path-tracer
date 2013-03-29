@@ -41,15 +41,15 @@ namespace SmallPathTracer {
         }
 
         // --- Private Methods ---
-        private Vector Radiance(Ray r, int depth) {
-            var intersection = Intersect(r);
+        private Vector Radiance(Ray ray, int depth) {
+            var intersection = Intersect(ray);
             if(intersection.IsMiss) {
                 return Vector.Zero; // if miss, return black
             }
             var obj = intersection.Sphere; // the hit object
-            Point x = r.Origin + r.Direction * intersection.Distance;
+            Point x = ray.Origin + ray.Direction * intersection.Distance;
             Vector n = (x - obj.Position).Normalize();
-            Vector nl = n.Dot(r.Direction) < 0 ? n : n * -1;
+            Vector nl = n.Dot(ray.Direction) < 0 ? n : n * -1;
             var f = obj.Color;
             var p = f.Red > f.Green && f.Red > f.Blue ? f.Red : f.Green > f.Blue ? f.Green : f.Blue; // max ReflectionType
 
@@ -78,22 +78,22 @@ namespace SmallPathTracer {
             }
 
             if(obj.ReflectionType == ReflectionType.Specular) { // Ideal SPECULAR reflection
-                return obj.Emission + f.Multiply(Radiance(new Ray(x, r.Direction - n * 2 * n.Dot(r.Direction)), depth));
+                return obj.Emission + f.Multiply(Radiance(new Ray(x, ray.Direction - n * 2 * n.Dot(ray.Direction)), depth));
             }
 
-            var reflRay = new Ray(x, r.Direction - n * 2 * n.Dot(r.Direction)); // Ideal dielectric REFRACTION
+            var reflRay = new Ray(x, ray.Direction - n * 2 * n.Dot(ray.Direction)); // Ideal dielectric REFRACTION
             var into = n.Dot(nl) > 0; // Ray from outside going in?
             const int Nc = 1;
             const double Nt = 1.5;
             var nnt = into ? Nc / Nt : Nt / Nc;
-            var ddn = r.Direction.Dot(nl);
+            var ddn = ray.Direction.Dot(nl);
 
             double cos2T;
             if((cos2T = 1 - nnt * nnt * (1 - ddn * ddn)) < 0) { // Total internal reflection
                 return obj.Emission + f.Multiply(Radiance(reflRay, depth));
             }
 
-            var tdir = (r.Direction * nnt - n * ((into ? 1 : -1) * (ddn * nnt + Math.Sqrt(cos2T)))).Normalize();
+            var tdir = (ray.Direction * nnt - n * ((into ? 1 : -1) * (ddn * nnt + Math.Sqrt(cos2T)))).Normalize();
             const double A = Nt - Nc;
             const double B = Nt + Nc;
             const double R0 = A * A / (B * B);
