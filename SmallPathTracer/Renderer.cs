@@ -14,6 +14,50 @@ namespace SmallPathTracer {
         }
 
         // --- Private Methods ---
+        private Vector CalculateDiffuseRadiance(int depth, Vector nl, Sphere obj, Color f, Point x) {
+            var r1 = 2 * Math.PI * random.NextDouble();
+            var r2 = random.NextDouble();
+            var r2SquareRoot = Math.Sqrt(r2);
+            var w = nl;
+            var u = ((Math.Abs(w.X) > .1 ? Vector.UnitY : Vector.UnitX) % w).Normalize();
+            var v = w % u;
+            var d = (u * Math.Cos(r1) * r2SquareRoot + v * Math.Sin(r1) * r2SquareRoot + w * Math.Sqrt(1 - r2)).Normalize();
+            return obj.Emission + f.Multiply(Radiance(new Ray(x, d), depth));
+        }
+
+        private Vector CalculateRefractionRadiance(Ray ray, int depth, Point x, Vector n, Vector nl, Sphere obj, Color f) {
+            var reflRay = new Ray(x, ray.Direction - n * 2 * n.Dot(ray.Direction)); // Ideal dielectric REFRACTION
+            var into = n.Dot(nl) > 0; // Ray from outside going in?
+            const int Nc = 1;
+            const double Nt = 1.5;
+            var nnt = @into ? Nc / Nt : Nt / Nc;
+            var ddn = ray.Direction.Dot(nl);
+
+            double cos2T;
+            if((cos2T = 1 - nnt * nnt * (1 - ddn * ddn)) < 0) { // Total internal reflection
+                return obj.Emission + f.Multiply(Radiance(reflRay, depth));
+            }
+
+            var tdir = (ray.Direction * nnt - n * ((@into ? 1 : -1) * (ddn * nnt + Math.Sqrt(cos2T)))).Normalize();
+            const double A = Nt - Nc;
+            const double B = Nt + Nc;
+            const double R0 = A * A / (B * B);
+            var c = 1 - (@into ? -ddn : tdir.Dot(n));
+            var re = R0 + (1 - R0) * c * c * c * c * c;
+            var tr = 1 - re;
+            var pp = .25 + .5 * re;
+            var rp = re / pp;
+            var tp = tr / (1 - pp);
+
+            return obj.Emission + f.Multiply(depth > 2 ? (random.NextDouble() < pp ? // Russian roulette
+                Radiance(reflRay, depth) * rp : Radiance(new Ray(x, tdir), depth) * tp) :
+                Radiance(reflRay, depth) * re + Radiance(new Ray(x, tdir), depth) * tr);
+        }
+
+        private Vector CalculateSpecularRadiance(Ray ray, int depth, Sphere obj, Color f, Point x, Vector n) {
+            return obj.Emission + f.Multiply(Radiance(new Ray(x, ray.Direction - n * 2 * n.Dot(ray.Direction)), depth));
+        }
+
         private Vector Radiance(Ray ray, int depth) {
             var intersection = scene.Intersect(ray);
             if(intersection.IsMiss) {
@@ -40,46 +84,14 @@ namespace SmallPathTracer {
             }
 
             if(obj.ReflectionType == ReflectionType.Diffuse) { // Ideal DIFFUSE reflection
-                var r1 = 2 * Math.PI * random.NextDouble();
-                var r2 = random.NextDouble();
-                var r2SquareRoot = Math.Sqrt(r2);
-                var w = nl;
-                var u = ((Math.Abs(w.X) > .1 ? Vector.UnitY : Vector.UnitX) % w).Normalize();
-                var v = w % u;
-                var d = (u * Math.Cos(r1) * r2SquareRoot + v * Math.Sin(r1) * r2SquareRoot + w * Math.Sqrt(1 - r2)).Normalize();
-                return obj.Emission + f.Multiply(Radiance(new Ray(x, d), depth));
+                return CalculateDiffuseRadiance(depth, nl, obj, f, x);
             }
 
             if(obj.ReflectionType == ReflectionType.Specular) { // Ideal SPECULAR reflection
-                return obj.Emission + f.Multiply(Radiance(new Ray(x, ray.Direction - n * 2 * n.Dot(ray.Direction)), depth));
+                return CalculateSpecularRadiance(ray, depth, obj, f, x, n);
             }
 
-            var reflRay = new Ray(x, ray.Direction - n * 2 * n.Dot(ray.Direction)); // Ideal dielectric REFRACTION
-            var into = n.Dot(nl) > 0; // Ray from outside going in?
-            const int Nc = 1;
-            const double Nt = 1.5;
-            var nnt = into ? Nc / Nt : Nt / Nc;
-            var ddn = ray.Direction.Dot(nl);
-
-            double cos2T;
-            if((cos2T = 1 - nnt * nnt * (1 - ddn * ddn)) < 0) { // Total internal reflection
-                return obj.Emission + f.Multiply(Radiance(reflRay, depth));
-            }
-
-            var tdir = (ray.Direction * nnt - n * ((into ? 1 : -1) * (ddn * nnt + Math.Sqrt(cos2T)))).Normalize();
-            const double A = Nt - Nc;
-            const double B = Nt + Nc;
-            const double R0 = A * A / (B * B);
-            var c = 1 - (into ? -ddn : tdir.Dot(n));
-            var re = R0 + (1 - R0) * c * c * c * c * c;
-            var tr = 1 - re;
-            var pp = .25 + .5 * re;
-            var rp = re / pp;
-            var tp = tr / (1 - pp);
-
-            return obj.Emission + f.Multiply(depth > 2 ? (random.NextDouble() < pp ? // Russian roulette
-                Radiance(reflRay, depth) * rp : Radiance(new Ray(x, tdir), depth) * tp) :
-                Radiance(reflRay, depth) * re + Radiance(new Ray(x, tdir), depth) * tr);
+            return CalculateRefractionRadiance(ray, depth, x, n, nl, obj, f);
         }
 
         // --- Public Methods ---
